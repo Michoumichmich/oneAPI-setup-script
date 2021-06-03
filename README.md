@@ -38,6 +38,7 @@ You can also install Intel's openCL driver (`intel-oneapi-runtime-opencl`) so yo
 *  to be able to target Intel's CPUs with openCL. 
 * `ninja-build cmake...` and other "build essentials" required for building a compiler.
 * `libcudnn8 libcudnn8-devel` for oneDNN.
+* `gcc-gfortran` or another Fortran compiler for NETLIB Lapack.
 
 ### Caveats
 * oneMKL does not support testing when building for both cuBLAS and cuRAND
