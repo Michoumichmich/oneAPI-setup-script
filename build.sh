@@ -117,6 +117,8 @@ cmake -GNinja \
 -DENABLE_NETLIB_BACKEND=ON \
 -DREF_BLAS_ROOT=$DPCPP_HOME/lapack/install \
 -DNETLIB_ROOT=$DPCPP_HOME/lapack/install \
+-DNETLIB_CBLAS_LIBRARY=$DPCPP_HOME/lapack/install/lib64/libcblas.so
+-DNETLIB_BLAS_LIBRARY=$DPCPP_HOME/lapack/install/lib64/libblas.so
 -DOPENCL_INCLUDE_DIR=$DPCPP_HOME/OpenCL-Headers \
 -DCUDA_TOOLKIT_ROOT_DIR=$CUDA_ROOT \
 -DSYCL_LIBRARY=$DPCPP_HOME/deploy/lib/libsycl.so \

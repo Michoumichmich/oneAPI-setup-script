@@ -29,15 +29,15 @@ public:
 
 
 ### Intel's openCL
-You can also install Intel's openCL driver so you can target your CPU with `-fsycl-targets=spir64_x86_64-unknown-unknown-sycldevice`. 
+You can also install Intel's openCL driver (`intel-oneapi-runtime-opencl`) so you can target your CPU with `-fsycl-targets=spir64_x86_64-unknown-unknown-sycldevice`. For the setup see [here](https://software.intel.com/content/www/us/en/develop/documentation/installation-guide-for-intel-oneapi-toolkits-linux/top/installation/install-using-package-managers.html).
 
 
 ### Dependencies
 * Even though the latest version of CUDA seems to work with DPC++, we need to use CUDA 10.2 as oneMKL uses cuBLAS 10.2. On RHEL: `cuda-10-2 libcublas-devel-10-2`. For the setup see: https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html#pre-installation-actions. 
 * `libatomic`
-* `intel-oneapi-runtime-opencl` to be able to target Intel's CPUs with openCL. For the setup see: https://software.intel.com/content/www/us/en/develop/documentation/installation-guide-for-intel-oneapi-toolkits-linux/top/installation/install-using-package-managers.html
-* `ninja-build cmake`
-
+*  to be able to target Intel's CPUs with openCL. 
+* `ninja-build cmake...` and other "build essentials" required for building a compiler.
+* `libcudnn8 libcudnn8-devel` for oneDNN.
 
 ### Caveats
 * oneMKL does not support testing when building for both cuBLAS and cuRAND
