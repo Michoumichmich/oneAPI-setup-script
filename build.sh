@@ -1,5 +1,4 @@
 #!/bin/sh
-
 export DPCPP_HOME=~/sycl_workspace
 export CUDA_ROOT=/usr/local/cuda-10.2
 export LD_LIBRARY_PATH=$DPCPP_HOME/deploy/lib/:$DPCPP_HOME/deploy/lib64/:$DPCPP_HOME/lapack/install/lib64/:$DPCPP_HOME/OpenCL-ICD-Loader/install/lib64:$CUDA_ROOT/lib:$CUDA_ROOT/lib64:$LD_LIBRARY_PATH
@@ -9,9 +8,7 @@ mkdir -p $DPCPP_HOME
 cd $DPCPP_HOME
 mkdir -p deploy
 
-
 #export LD_PRELOAD=/opt/intel/opencl/libOpenCL.so.1
-
 
 run_test=false
 cmake_test="OFF"
@@ -23,8 +20,6 @@ else
     run_test=true
     cmake_test="ON"
 fi
-
-
 
 
 # OpenCL headers+ICD
@@ -57,7 +52,7 @@ cd build
 ninja install -j `nproc`
 if  $run_test ; then 
     echo "testing llvm"
-    #ninja check -j `nproc` 
+    ninja check -j `nproc` 
 fi
 
 #Lapack Reference                                                                                                                                                                                                             
@@ -79,7 +74,7 @@ if  $run_test ; then
 fi
 
 
-
+#oneTBB
 cd $DPCPP_HOME
 (if cd oneTBB; then git pull; else git clone https://github.com/oneapi-src/oneTBB.git; fi)
 cd oneTBB
@@ -98,8 +93,7 @@ if $run_test ; then
 fi
 
 
-
-
+#oneMKL
 cd $DPCPP_HOME
 (if cd oneMKL; then git pull; else git clone https://github.com/oneapi-src/oneMKL.git; fi)
 cd oneMKL
@@ -127,8 +121,6 @@ ninja install -j `nproc`
 if  $run_test ; then 
     ninja test -j `nproc` 
 fi
-
-
 
 
 #oneDNN
