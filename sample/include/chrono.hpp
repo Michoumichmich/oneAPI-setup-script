@@ -4,11 +4,14 @@
 #include <iostream>
 #include <chrono>
 
+/**
+ * Small Chrono class that prints the time spent in a scope.
+ */
 class Chrono {
 public:
     inline Chrono();
 
-    inline explicit Chrono(const std::string &&caller_name);
+    inline explicit Chrono(std::string &&caller_name);
 
     inline Chrono(const Chrono &) = delete;
 
@@ -20,10 +23,6 @@ public:
 
 private:
     std::string caller;
-
-    /**
-     * Okay, well, I dont know how to make it simpler unless if we cheat with void pointers...
-     */
 
     const std::chrono::time_point<std::chrono::high_resolution_clock, std::chrono::duration<long int, std::ratio<1, 1000000000>>> start;
 };
@@ -41,9 +40,9 @@ inline Chrono::~Chrono() {
     }
 }
 
-inline Chrono::Chrono(const std::string &&caller_name)
+inline Chrono::Chrono(std::string &&caller_name)
         : Chrono() {
-    caller = std::move(caller_name);
+    caller = caller_name;
 }
 
 inline double Chrono::stop() {

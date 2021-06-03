@@ -1,6 +1,7 @@
 # oneMKL samples
 
 If the environment is correctly set you should be able to run the sample with:
+
 ```
 mkdir build; 
 cd build 
