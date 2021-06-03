@@ -52,7 +52,7 @@ cd build
 ninja install -j `nproc`
 if  $run_test ; then 
     echo "testing llvm"
-    #ninja check -j `nproc` 
+    ninja check -j `nproc` 
 fi
 
 #Lapack Reference                                                                                                                                                                                                             
