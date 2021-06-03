@@ -1,21 +1,22 @@
-// Standard SYCL header
-#include <CL/sycl.hpp>
+#include <sycl/sycl.hpp>
 #include <oneapi/mkl.hpp>
-// STL classes
+
 #include <exception>
 #include <iostream>
 
 #include <chrono.hpp>
 #include <sycl_unique_ptr.hpp>
 #include <common.hpp>
-// Declarations for Intel oneAPI Math Kernel Library DPC++ APIs
 
 int main(int argc, char *argv[])
 {
     using T = float;
     size_t n_laps = 30;
     size_t mat_size = 16384;
-    T alpha = 1, beta = 0;
+    if (argc > 1) {
+        mat_size = std::strtoul(argv[1], nullptr, 10);
+    }
+    T alpha = 1, beta = 0; // gemm parameters
 
     // Create asynchronous exceptions handler to be attached to queue.
     // Not required; can provide helpful information in case the system isn’t correctly configured.
@@ -37,7 +38,7 @@ int main(int argc, char *argv[])
             }
         }
     };
-    
+
     // Create GPU device
     sycl::device my_device = try_get_cuda();
     // create execution queue on my gpu device with exception handler attached
@@ -55,7 +56,6 @@ int main(int argc, char *argv[])
     sycl::buffer<T, 1> A_buffer(A.data(), A.size());
     sycl::buffer<T, 1> B_buffer(B.data(), B.size());
     sycl::buffer<T, 1> C_buffer(C.data(), C.size());
-    
 
     std::cout << "Running on:" << my_device.get_info<sycl::info::device::name>() << std::endl;
     Chrono c("computing + error handling");

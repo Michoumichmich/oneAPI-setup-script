@@ -40,7 +40,8 @@ You can also install Intel's openCL driver so you can target your CPU with `-fsy
 
 
 ### Caveats
-oneMKL does not support testing when building for both cuBLAS and cuRAND
+* oneMKL does not support testing when building for both cuBLAS and cuRAND
+* for oneMKL with cuda you should use the namespace `oneapi::mkl::blas::column_major::` as cuBLAS is column_major. 
 
 ### Repositories used
 - OpenCL Headers+Loaders: https://github.com/KhronosGroup/OpenCL-Headers.git, https://github.com/KhronosGroup/OpenCL-ICD-Loader.git
