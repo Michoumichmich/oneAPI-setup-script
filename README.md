@@ -10,6 +10,8 @@ Everything will be installed to `$DPCPP_HOME/deploy`.
 
 To build with testing support and run the tests for DPC++, oneMKL, oneTBB, oneDNN and Lapack, run: ```DPCPP_TESTS=ON ./build.sh```
 
+If you want to build libc++, use `CC=clang-X CXX=clang++-X` with another version of clang, gcc won't compile the libc as the `asm` syntax is not the same. Using this clang/dpc++ won't work either, there's a bug. 
+
 ### Environment variables
 Once everything was built, add the first four exports of the script in your environment or add them in your shell's config file. 
 
