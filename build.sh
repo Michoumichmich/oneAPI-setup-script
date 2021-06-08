@@ -22,6 +22,8 @@ else
 fi
 
 
+export CXXFLAGS="${CXXFLAGS} -D_GLIBCXX_USE_CXX11_ABI=0"
+
 # OpenCL headers+ICD
 cd $DPCPP_HOME
 (if cd OpenCL-Headers; then git pull; else git clone https://github.com/KhronosGroup/OpenCL-Headers.git; fi)
