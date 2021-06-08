@@ -47,7 +47,9 @@ python3 ./buildbot/configure.py \
  --cmake-opt="-DCMAKE_INSTALL_PREFIX=$DPCPP_HOME/deploy" \
  --cmake-opt="-DCUDA_SDK_ROOT_DIR=$CUDA_ROOT" \
  --cmake-opt="-DLLVM_ENABLE_PROJECTS=libc;libcxxabi;libcxx;clang;sycl;llvm-spirv;opencl;opencl-aot;libdevice;xpti;xptifw;libclc;openmp;clang-tools-extra;compiler-rt" \
- --cmake-opt="-DLLVM_BUILD_TESTS=$cmake_test"
+ --cmake-opt="-DLLVM_BUILD_TESTS=$cmake_test" \
+ --cmake-opt="-DLIBC_COMPILE_OPTIONS_DEFAULT=-march=native -mtune=native" \
+ --cmake-opt="LLVM_LIBC_FULL_BUILD=ON"
 cd build
 ninja install -j `nproc`
 if  $run_test ; then 
