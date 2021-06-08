@@ -22,7 +22,7 @@ else
 fi
 
 
-export CXXFLAGS="${CXXFLAGS} -D_GLIBCXX_USE_CXX11_ABI=0"
+export CXXFLAGS="${CXXFLAGS} -D_GLIBCXX_USE_CXX11_ABI=1"
 
 # OpenCL headers+ICD
 cd $DPCPP_HOME
