@@ -10,7 +10,7 @@ using namespace usm_smart_ptr;
 int main(int argc, char *argv[]) {
     using T = float;
     size_t n_laps = 30;
-    size_t mat_size = 102400; // Bound by your GPU's memory.
+    size_t mat_size = 16384; // Bound by your GPU's memory.
 
     if (argc > 1) {
         mat_size = std::stoul(argv[1], nullptr, 10);
