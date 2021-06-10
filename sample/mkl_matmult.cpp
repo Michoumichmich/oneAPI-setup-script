@@ -13,7 +13,7 @@ int main(int argc, char *argv[]) {
     }
     T alpha = 1, beta = 0; // gemm parameters
 
-    sycl::queue my_queue = try_get_cuda_queue();
+    sycl::queue my_queue = try_get_queue(cuda_selector{});
 
     std::cout << "Initalizing the matrices..." << std::endl;
     size_t n = mat_size, m = mat_size, k = mat_size, ldA = mat_size, ldB = mat_size, ldC = mat_size;

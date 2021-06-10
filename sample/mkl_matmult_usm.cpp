@@ -3,6 +3,9 @@
 
 #include <chrono.hpp>
 #include <common.hpp>
+#include <usm_smart_ptr.hpp>
+
+using namespace usm_smart_ptr;
 
 int main(int argc, char *argv[]) {
     using T = float;
@@ -14,16 +17,16 @@ int main(int argc, char *argv[]) {
     }
     T alpha = 1, beta = 0; // gemm parameters
 
-    sycl::queue my_queue = try_get_cuda_queue();
+    sycl::queue my_queue = try_get_queue(cuda_selector{});
 
     std::cout << "Initalizing the matrices..." << std::endl;
     long n = mat_size, m = mat_size, k = mat_size, ldA = mat_size, ldB = mat_size, ldC = mat_size;
     // Initializing USM shared memory in an std::unique_ptr for auto mem management
-    auto A = make_sycl_unique<T>(mat_size * mat_size, my_queue); // sycl::malloc_shared<T>(mat_size*mat_size,q);
-    auto B = make_sycl_unique<T>(mat_size * mat_size, my_queue);
-    auto C = make_sycl_unique<T>(mat_size * mat_size, my_queue);
-    fill_rand(A);
-    fill_rand(B);
+    auto A = make_unique_ptr<T, alloc::shared>(mat_size * mat_size, my_queue); // sycl::malloc_shared<T>(mat_size*mat_size,q);
+    auto B = make_unique_ptr<T, alloc::shared>(mat_size * mat_size, my_queue);
+    auto C = make_unique_ptr<T, alloc::device>(mat_size * mat_size, my_queue);
+    fill_rand(A, A.count());
+    fill_rand(B, B.count());
 
     std::cout << "Running on:" << my_queue.get_device().get_info<sycl::info::device::name>() << std::endl;
     Chrono c("computing + error handling");
