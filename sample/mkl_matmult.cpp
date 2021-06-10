@@ -9,7 +9,7 @@ int main(int argc, char *argv[]) {
     size_t n_laps = 30;
     size_t mat_size = 16384;
     if (argc > 1) {
-        mat_size = std::strtoul(argv[1], nullptr, 10);
+        mat_size = std::stoul(argv[1], nullptr, 10);
     }
     T alpha = 1, beta = 0; // gemm parameters
 

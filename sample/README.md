@@ -1,7 +1,6 @@
 # oneMKL samples
 
-The code runs a small benchmarks of your blas implementation using multiplication of square matrices. You can pass the
-size as an argument of the executable.
+The code runs a small benchmarks of your blas implementation using multiplication of square matrices. You can pass the size as an argument of the executable.
 
 Two versions are provided, one of which is using the USM inferface.
 
@@ -16,8 +15,7 @@ cmake --build .
 
 ### Detail
 
-- `sycl_unique<T>` is a unique pointer to a USM allocated memory which wraps a `std::unique_ptr<T>` with a custom
-  deleter and holds the allocated size.
+- `sycl_unique<T>` is a unique pointer to a USM allocated memory which wraps a `std::unique_ptr<T>` with a custom deleter and holds the allocated size.
 - `fill_rand` fills a `std::vector<T>` or `sycl_unique<T>` with random values.
 
 ### Refs

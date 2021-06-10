@@ -10,10 +10,10 @@ using namespace usm_smart_ptr;
 int main(int argc, char *argv[]) {
     using T = float;
     size_t n_laps = 30;
-    size_t mat_size = 1024; // Bound by your GPU's memory.
+    size_t mat_size = 102400; // Bound by your GPU's memory.
 
     if (argc > 1) {
-        mat_size = std::strtoul(argv[1], nullptr, 10);
+        mat_size = std::stoul(argv[1], nullptr, 10);
     }
     T alpha = 1, beta = 0; // gemm parameters
 
@@ -30,22 +30,25 @@ int main(int argc, char *argv[]) {
 
     std::cout << "Running on:" << my_queue.get_device().get_info<sycl::info::device::name>() << std::endl;
     Chrono c("computing + error handling");
-    for (size_t i = 0; i < n_laps; i++) {
-        std::cout << i << '/' << n_laps << '\n';
-        try {
+
+    try {
+        sycl::event e;
+        for (size_t i = 0; i < n_laps; i++) {
+            std::cout << i << '/' << n_laps << '\n';
             using oneapi::mkl::transpose;
             using oneapi::mkl::blas::column_major::gemm;
-            gemm(my_queue, transpose::nontrans, transpose::nontrans, m, n, k, alpha, A.get(), ldA, B.get(), ldB, beta,
-                 C.get(), ldC);  // C <- alpha*OP(A)*OP(B) + beta*C
+            // C <- alpha*OP(A)*OP(B) + beta*C
+            e = gemm(my_queue, transpose::nontrans, transpose::nontrans, m, n, k, alpha, A.get(), ldA, B.get(), ldB, beta, C.get(), ldC, {e});
         }
-        catch (sycl::exception const &e) {
-            std::cout << "Caught synchronous SYCL exception during GEMM: " << e.what() << std::endl;
-        }
-        catch (std::exception const &e) {
-            std::cout << "Caught synchronous STL exception during GEMM: " << e.what() << std::endl;
-        }
-        my_queue.wait_and_throw();
+        e.wait_and_throw();
     }
+    catch (sycl::exception const &e) {
+        std::cout << "Caught synchronous SYCL exception during GEMM: " << e.what() << std::endl;
+    }
+    catch (std::exception const &e) {
+        std::cout << "Caught synchronous STL exception during GEMM: " << e.what() << std::endl;
+    }
+
     uint64_t operations_performed = n_laps * mat_size * mat_size * (2 * mat_size - 1);
     std::cout << "Gflops : " << operations_performed / 1000000000 / c.stop() << std::endl;
 

@@ -73,7 +73,8 @@ void do_fill_rand_on_host(ForwardIt first, ForwardIt last) {
 /**
  * This function accepts only memory that is accessible from the CPU
  * To achive this it uses fantom types that wraps the pointer.
- *
+ * This could be done by calling the runtime to check where is the
+ * usm memory allocated, but here we can avoid doing that.
  */
 template<typename T, sycl::usm::alloc location>
 typename std::enable_if<location == sycl::usm::alloc::host || location == sycl::usm::alloc::shared, void>::type
