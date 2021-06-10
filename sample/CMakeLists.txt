@@ -14,8 +14,8 @@ set(CMAKE_CXX_FLAGS_RELEASE "${OPT_FLAGS} ${WARNING_FLAGS} ${DISABLED_WARNINGS}"
 set(CMAKE_CXX_FLAGS_DEBUG " ${WARNING_FLAGS}  ${DISABLED_WARNINGS} -g3 -Og")
 
 include_directories(include/)
-include_directories(/home/michel/sycl_workspace/deploy/include)
-link_directories(/home/michel/sycl_workspace/deploy/lib)
+include_directories($ENV{DPCPP_HOME}/deploy/include)
+link_directories($ENV{DPCPP_HOME}/deploy/lib)
 
 add_executable(mkl_kernel mkl_matmult.cpp)
 add_executable(mkl_kernel_usm mkl_matmult_usm.cpp)

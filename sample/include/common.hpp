@@ -11,8 +11,8 @@ using namespace usm_smart_ptr;
 class cuda_selector : public sycl::device_selector {
 public:
     int operator()(const sycl::device &device) const override {
-        return device.is_gpu() && (device.get_info<sycl::info::device::driver_version>().find("CUDA") != std::string::npos) ? 1 : -1;
-        //return device.get_platform().get_backend() == sycl::backend::cuda ? 1 : -1;
+        return device.get_platform().get_backend() == sycl::backend::cuda;
+        //return device.is_gpu() && (device.get_info<sycl::info::device::driver_version>().find("CUDA") != std::string::npos);
     }
 };
 
@@ -26,7 +26,8 @@ sycl::queue try_get_queue(const sycl::device_selector &selector) {
     }
     catch (...) {
         dev = sycl::device(sycl::host_selector());
-        std::cout << "Warning: GPU device not found! Fall back on: " << dev.get_info<sycl::info::device::name>() << std::endl;
+        std::cout << "Warning: GPU device not found! Fall back on: " << dev.get_info<sycl::info::device::name>()
+                  << std::endl;
     }
     auto exception_handler = [](const sycl::exception_list &exceptions) {
         for (std::exception_ptr const &e : exceptions) {
@@ -50,7 +51,7 @@ sycl::queue try_get_queue(const sycl::device_selector &selector) {
  * Fills a container/array with random numbers from positions first to last
  */
 template<typename T, class ForwardIt>
-void do_fill_rand(ForwardIt first, ForwardIt last) {
+void do_fill_rand_on_host(ForwardIt first, ForwardIt last) {
     static std::random_device dev;
     static std::mt19937 engine(dev());
     auto generator = [&]() {
@@ -69,13 +70,27 @@ void do_fill_rand(ForwardIt first, ForwardIt last) {
 }
 
 
+/**
+ * This function accepts only memory that is accessible from the CPU
+ * To achive this it uses fantom types that wraps the pointer.
+ *
+ */
 template<typename T, sycl::usm::alloc location>
-typename std::enable_if<location == sycl::usm::alloc::host || location == sycl::usm::alloc::shared, void>::type  fill_rand(usm_unique_ptr<T,location> &v, size_t count) {
-    do_fill_rand<T>(+v.get(), v.get() + count);
+typename std::enable_if<location == sycl::usm::alloc::host || location == sycl::usm::alloc::shared, void>::type
+fill_rand(const usm_ptr<T, location> &v, size_t count) {
+    do_fill_rand_on_host<T>(+v, v + count);
 }
 
+/**
+ * This function would only accept device allocated memory
+ */
+/*template<typename T, sycl::usm::alloc location>
+typename std::enable_if<location == sycl::usm::alloc::device, void>::type
+fill_rand(const usm_ptr<T, location> &v, size_t count) {
+    do_fill_rand_on_device<T>(+v, v + count);
+}*/
 
 template<typename T>
 void fill_rand(std::vector<T> &v) {
-    do_fill_rand<T>(v.begin(), v.end());
+    do_fill_rand_on_host<T>(v.begin(), v.end());
 }

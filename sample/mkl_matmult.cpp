@@ -37,7 +37,8 @@ int main(int argc, char *argv[]) {
             using oneapi::mkl::transpose;
             using oneapi::mkl::blas::column_major::gemm; // row_major not implemented on cublas
             // C <- alpha*OP(A)*OP(B) + beta*C
-            gemm(my_queue, transpose::nontrans, transpose::nontrans, m, n, k, alpha, A_buffer, ldA, B_buffer, ldB, beta, C_buffer, ldC);
+            gemm(my_queue, transpose::nontrans, transpose::nontrans, m, n, k, alpha, A_buffer, ldA, B_buffer, ldB, beta,
+                 C_buffer, ldC);
         }
         catch (sycl::exception const &e) {
             std::cout << "Caught synchronous SYCL exception during GEMM: " << e.what() << std::endl;

@@ -10,7 +10,7 @@ using namespace usm_smart_ptr;
 int main(int argc, char *argv[]) {
     using T = float;
     size_t n_laps = 30;
-    size_t mat_size = 16384; // Bound by your GPU's memory.
+    size_t mat_size = 1024; // Bound by your GPU's memory.
 
     if (argc > 1) {
         mat_size = std::strtoul(argv[1], nullptr, 10);
@@ -22,11 +22,11 @@ int main(int argc, char *argv[]) {
     std::cout << "Initalizing the matrices..." << std::endl;
     long n = mat_size, m = mat_size, k = mat_size, ldA = mat_size, ldB = mat_size, ldC = mat_size;
     // Initializing USM shared memory in an std::unique_ptr for auto mem management
-    auto A = make_unique_ptr<T, alloc::shared>(mat_size * mat_size, my_queue); // sycl::malloc_shared<T>(mat_size*mat_size,q);
+    auto A = make_unique_ptr<T, alloc::shared>(mat_size * mat_size, my_queue);
     auto B = make_unique_ptr<T, alloc::shared>(mat_size * mat_size, my_queue);
     auto C = make_unique_ptr<T, alloc::device>(mat_size * mat_size, my_queue);
-    fill_rand(A, A.count());
-    fill_rand(B, B.count());
+    fill_rand(A.get(), A.count());
+    fill_rand(B.get(), B.count());
 
     std::cout << "Running on:" << my_queue.get_device().get_info<sycl::info::device::name>() << std::endl;
     Chrono c("computing + error handling");
@@ -35,7 +35,8 @@ int main(int argc, char *argv[]) {
         try {
             using oneapi::mkl::transpose;
             using oneapi::mkl::blas::column_major::gemm;
-            gemm(my_queue, transpose::nontrans, transpose::nontrans, m, n, k, alpha, A.get(), ldA, B.get(), ldB, beta, C.get(), ldC);  // C <- alpha*OP(A)*OP(B) + beta*C
+            gemm(my_queue, transpose::nontrans, transpose::nontrans, m, n, k, alpha, A.get(), ldA, B.get(), ldB, beta,
+                 C.get(), ldC);  // C <- alpha*OP(A)*OP(B) + beta*C
         }
         catch (sycl::exception const &e) {
             std::cout << "Caught synchronous SYCL exception during GEMM: " << e.what() << std::endl;
