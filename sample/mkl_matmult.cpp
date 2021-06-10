@@ -13,28 +13,7 @@ int main(int argc, char *argv[]) {
     }
     T alpha = 1, beta = 0; // gemm parameters
 
-    // Create GPU device
-    sycl::device my_device = try_get_cuda_device();
-    /**
-     * SYCL exception handler
-     * Create asynchronous exceptions handler to be attached to queue.
-     * Not required; can provide helpful information in case the system isn’t correctly configured.
-     */
-    auto my_exception_handler = [](const sycl::exception_list &exceptions) {
-        for (std::exception_ptr const &e : exceptions) {
-            try {
-                std::rethrow_exception(e);
-            }
-            catch (sycl::exception const &e) {
-                std::cout << "Caught asynchronous SYCL exception: " << e.what() << std::endl;
-            }
-            catch (std::exception const &e) {
-                std::cout << "Caught asynchronous STL exception: " << e.what() << std::endl;
-            }
-        }
-    };
-    // create execution queue on my gpu device with exception handler attached
-    sycl::queue my_queue(my_device, my_exception_handler);
+    sycl::queue my_queue = try_get_cuda_queue();
 
     std::cout << "Initalizing the matrices..." << std::endl;
     size_t n = mat_size, m = mat_size, k = mat_size, ldA = mat_size, ldB = mat_size, ldC = mat_size;
@@ -49,7 +28,7 @@ int main(int argc, char *argv[]) {
     sycl::buffer<T, 1> B_buffer(B.data(), B.size());
     sycl::buffer<T, 1> C_buffer(C.data(), C.size());
 
-    std::cout << "Running on:" << my_device.get_info<sycl::info::device::name>() << std::endl;
+    std::cout << "Running on:" << my_queue.get_device().get_info<sycl::info::device::name>() << std::endl;
     Chrono c("computing + error handling");
     for (size_t i = 0; i < n_laps; i++) {
         std::cout << i << '/' << n_laps << '\n';

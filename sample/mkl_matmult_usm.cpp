@@ -14,31 +14,18 @@ int main(int argc, char *argv[]) {
     }
     T alpha = 1, beta = 0; // gemm parameters
 
-    sycl::device my_device = try_get_cuda_device();
-    auto my_exception_handler = [](const sycl::exception_list &exceptions) {
-        for (std::exception_ptr const &e : exceptions) {
-            try {
-                std::rethrow_exception(e);
-            }
-            catch (sycl::exception const &e) {
-                std::cout << "Caught asynchronous SYCL exception: " << e.what() << std::endl;
-            }
-            catch (std::exception const &e) {
-                std::cout << "Caught asynchronous STL exception: " << e.what() << std::endl;
-            }
-        }
-    };
-    sycl::queue my_queue(my_device, my_exception_handler);
+    sycl::queue my_queue = try_get_cuda_queue();
 
     std::cout << "Initalizing the matrices..." << std::endl;
     long n = mat_size, m = mat_size, k = mat_size, ldA = mat_size, ldB = mat_size, ldC = mat_size;
-    auto A = make_sycl_unique<T>(mat_size * mat_size, my_queue);
+    // Initializing USM shared memory in an std::unique_ptr for auto mem management
+    auto A = make_sycl_unique<T>(mat_size * mat_size, my_queue); // sycl::malloc_shared<T>(mat_size*mat_size,q);
     auto B = make_sycl_unique<T>(mat_size * mat_size, my_queue);
     auto C = make_sycl_unique<T>(mat_size * mat_size, my_queue);
     fill_rand(A);
     fill_rand(B);
 
-    std::cout << "Running on:" << my_device.get_info<sycl::info::device::name>() << std::endl;
+    std::cout << "Running on:" << my_queue.get_device().get_info<sycl::info::device::name>() << std::endl;
     Chrono c("computing + error handling");
     for (size_t i = 0; i < n_laps; i++) {
         std::cout << i << '/' << n_laps << '\n';
