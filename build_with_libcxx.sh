@@ -8,6 +8,7 @@ mkdir -p $DPCPP_HOME
 cd $DPCPP_HOME
 mkdir -p deploy
 
+export CXXFLAGS="${CXXFLAGS} -stdlib=libc++"
 #export LD_PRELOAD=/opt/intel/opencl/libOpenCL.so.1
 
 run_test=false
@@ -44,11 +45,16 @@ python3 ./buildbot/configure.py \
   -t release \
   --cmake-opt="-DCMAKE_INSTALL_PREFIX=$DPCPP_HOME/deploy" \
   --cmake-opt="-DCUDA_SDK_ROOT_DIR=$CUDA_ROOT" \
-  --cmake-opt="-DLLVM_ENABLE_PROJECTS=libc;libcxxabi;libcxx;clang;sycl;llvm-spirv;opencl;opencl-aot;libdevice;xpti;xptifw;libclc;openmp;clang-tools-extra;compiler-rt" \
+  --cmake-opt="-DLLVM_ENABLE_PROJECTS=libcxxabi;libunwind;libcxx;clang;sycl;llvm-spirv;opencl;opencl-aot;libdevice;xpti;xptifw;libclc;openmp;clang-tools-extra;compiler-rt" \
   --cmake-opt="-DLLVM_BUILD_TESTS=$cmake_test" \
   --cmake-opt="-DLIBC_COMPILE_OPTIONS_DEFAULT=-march=native" \
   --cmake-opt="-DLLVM_LIBC_FULL_BUILD=ON" \
-  --cmake-opt="-DCMAKE_CXX_STANDARD=17"
+  --cmake-opt="-DLIBCXXABI_USE_LLVM_UNWINDER=ON" \
+  --cmake-opt="-DLIBCXX_USE_COMPILER_RT=ON" \
+  --cmake-opt="-DSYCL_ENABLE_WERROR=OFF" \
+  --cmake-opt="-DCLANG_DEFAULT_CXX_STDLIB=libc++" \
+  --cmake-opt="-DCMAKE_CXX_STANDARD=17" \
+  --cmake-opt="-Wno-dev"
 cd build
 ninja install -j $(nproc)
 if $run_test; then
@@ -65,6 +71,7 @@ cd build/
 cmake \
   -DBUILD_SHARED_LIBS=ON \
   -DCBLAS=ON \
+  -DCMAKE_CXX_FLAGS="-stdlib=libc++" \
   -DLAPACKE=ON \
   -DBUILD_TESTING=$cmake_test \
   -DCMAKE_INSTALL_PREFIX=$DPCPP_HOME/lapack/install \
@@ -83,6 +90,7 @@ cd build
 cmake -GNinja \
   -DCMAKE_CXX_COMPILER=$DPCPP_HOME/deploy/bin/clang++ \
   -DCMAKE_BUILD_TYPE=Release \
+  -DCMAKE_CXX_FLAGS="-stdlib=libc++" \
   -DTBB_STRICT=OFF \
   -DCMAKE_INSTALL_PREFIX=$DPCPP_HOME/deploy/ \
   -DTBB_TEST=$cmake_test \
@@ -102,6 +110,7 @@ cmake -GNinja \
   -DCMAKE_CXX_COMPILER=$DPCPP_HOME/deploy/bin/clang++ \
   -DCMAKE_BUILD_TYPE=Release \
   -DCMAKE_CXX_STANDARD=17 \
+  -DCMAKE_CXX_FLAGS="-stdlib=libc++ -lc++ -lc++abi" \
   -DTARGET_DOMAINS=blas \
   -DENABLE_MKLGPU_BACKEND=OFF \
   -DENABLE_CURAND_BACKEND=OFF \
@@ -132,6 +141,7 @@ cmake -GNinja \
   -DCMAKE_CXX_COMPILER=$DPCPP_HOME/deploy/bin/clang++ \
   -DCMAKE_BUILD_TYPE=Release \
   -DCMAKE_CXX_STANDARD=17 \
+  -DCMAKE_CXX_FLAGS="-stdlib=libc++" \
   -DDNNL_INSTALL_MODE=BUNDLE \
   -DDNNL_CPU_RUNTIME=DPCPP \
   -DDNNL_GPU_RUNTIME=DPCPP \

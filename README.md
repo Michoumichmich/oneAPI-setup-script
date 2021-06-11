@@ -51,7 +51,7 @@ see [here](https://software.intel.com/content/www/us/en/develop/documentation/in
   see: https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html#pre-installation-actions.
 * `libatomic`
 * to be able to target Intel's CPUs with openCL.
-* `ninja-build cmake...` and other "build essentials" required for building a compiler.
+* `ninja-build cmake libxml2-devel ...` and other "build essentials" required for building a compiler.
 * `libcudnn8 libcudnn8-devel` for oneDNN.
 * `gcc-gfortran` or another Fortran compiler for NETLIB Lapack.
 * `hwloc-devel` for oneTBB
