@@ -46,6 +46,7 @@ python3 ./buildbot/configure.py \
   -t release \
   --cmake-opt="-DCMAKE_INSTALL_PREFIX=$DPCPP_HOME/deploy" \
   --cmake-opt="-DCUDA_SDK_ROOT_DIR=$CUDA_ROOT" \
+  --cmake-opt="-DLLVM_BINUTILS_INCDIR=/usr/local/include" \
   --cmake-opt="-DLLVM_ENABLE_PROJECTS=clang;sycl;llvm-spirv;opencl;opencl-aot;libdevice;xpti;xptifw;libclc;openmp;clang-tools-extra;compiler-rt" \
   --cmake-opt="-DLLVM_BUILD_TESTS=$cmake_test" \
   --cmake-opt="-DCMAKE_CXX_STANDARD=17" \
