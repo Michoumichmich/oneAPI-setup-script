@@ -59,6 +59,7 @@ see [here](https://software.intel.com/content/www/us/en/develop/documentation/in
 
 ### Caveats
 
+* CLion integration: you need to add `cidr.compiler.clang.fsycl=true` in the registry of CLion [see](https://www.jetbrains.com/help/clion/tuning-the-ide.html?keymap=secondary_macos#configure-platform-properties)
 * oneMKL does not support testing when building for both cuBLAS and cuRAND
 * for oneMKL with cuda you should use the namespace `oneapi::mkl::blas::column_major::` as cuBLAS is column_major.
 
