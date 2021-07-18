@@ -52,6 +52,7 @@ python3 ./buildbot/configure.py \
   --cmake-opt="-DCMAKE_CXX_STANDARD=17" \
   --cmake-opt="-DLLVM_ENABLE_LTO=off" \
   --cmake-opt="-DLLVM_ENABLE_LLD=ON" \
+  --cmake-opt="-DSYCL_ENABLE_WERROR=OFF" \
   --cmake-opt="-Wno-dev"
 cd build
 ninja install -j $(nproc)
