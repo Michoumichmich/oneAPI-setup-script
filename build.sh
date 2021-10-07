@@ -55,7 +55,7 @@ python3 ./buildbot/configure.py \
   --cmake-opt="-DSYCL_ENABLE_WERROR=OFF" \
   --cmake-opt="-Wno-dev"
 cd build
-ninja install -j $(nproc)
+ninja deploy-sycl-toolchain -j $(nproc)
 if $run_test; then
   echo "testing llvm"
   ninja check -j $(nproc)
