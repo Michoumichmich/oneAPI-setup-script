@@ -1,6 +1,6 @@
 #!/bin/sh
 export DPCPP_HOME=~/sycl_workspace
-export CUDA_ROOT=/usr/local/cuda
+export CUDA_ROOT=/usr/local/cuda-11
 export LD_LIBRARY_PATH=$DPCPP_HOME/deploy/lib/:$DPCPP_HOME/deploy/lib64/:$DPCPP_HOME/lapack/install/lib64/:$DPCPP_HOME/OpenCL-ICD-Loader/install/lib64:$CUDA_ROOT/lib:$CUDA_ROOT/lib64:$LD_LIBRARY_PATH
 export PATH=$DPCPP_HOME/deploy/bin/:$CUDA_ROOT/bin:$PATH
 
