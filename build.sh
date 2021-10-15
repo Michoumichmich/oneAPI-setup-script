@@ -43,7 +43,7 @@ cd $DPCPP_HOME
 cd llvm
 python3 ./buildbot/configure.py \
   --cuda \
-  -t release \
+  -t release --no-werror \
   --cmake-opt="-DCMAKE_INSTALL_PREFIX=$DPCPP_HOME/deploy" \
   --cmake-opt="-DCUDA_SDK_ROOT_DIR=$CUDA_ROOT" \
   --cmake-opt="-DLLVM_BINUTILS_INCDIR=/usr/local/include" \
@@ -54,7 +54,6 @@ python3 ./buildbot/configure.py \
   --cmake-opt="-DLLVM_ENABLE_LLD=ON" \
   --cmake-opt="-DSYCL_ENABLE_WERROR=OFF" \
   --cmake-opt="-Wno-dev"
-mkdir -p build
 cd build
 ninja deploy-sycl-toolchain -j $(nproc)
 if $run_test; then
