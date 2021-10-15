@@ -47,14 +47,14 @@ python3 ./buildbot/configure.py \
   --cmake-opt="-DCMAKE_INSTALL_PREFIX=$DPCPP_HOME/deploy" \
   --cmake-opt="-DCUDA_SDK_ROOT_DIR=$CUDA_ROOT" \
   --cmake-opt="-DLLVM_BINUTILS_INCDIR=/usr/local/include" \
-  --cmake-opt="-DLLVM_ENABLE_PROJECTS=clang;sycl;llvm-spirv;libunwind;opencl;libdevice;xpti;xptifw;libclc;lld;lldb;libc;libcxx;libcxxabi;openmp;clang-tools-extra;compiler-rt" \
+  --cmake-opt="-DLLVM_ENABLE_PROJECTS=clang;sycl;llvm-spirv;libunwind;opencl;libdevice;xpti;xptifw;libclc;lld;lldb;libcxx;libcxxabi;openmp;clang-tools-extra;compiler-rt" \
   --cmake-opt="-DLLVM_BUILD_TESTS=$cmake_test" \
   --cmake-opt="-DCMAKE_CXX_STANDARD=17" \
   --cmake-opt="-DLLVM_ENABLE_LTO=off" \
   --cmake-opt="-DLLVM_ENABLE_LLD=ON" \
-  --cmake-opt="-DSYCL_ENABLE_WERROR=OFF" \
   --cmake-opt="-Wno-dev"
 cd build
+ninja install -j $(nproc)
 ninja deploy-sycl-toolchain -j $(nproc)
 if $run_test; then
   echo "testing llvm"
