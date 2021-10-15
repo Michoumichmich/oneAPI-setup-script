@@ -54,6 +54,7 @@ python3 ./buildbot/configure.py \
   --cmake-opt="-DLLVM_ENABLE_LLD=ON" \
   --cmake-opt="-DSYCL_ENABLE_WERROR=OFF" \
   --cmake-opt="-Wno-dev"
+mkdir -p build
 cd build
 ninja deploy-sycl-toolchain -j $(nproc)
 if $run_test; then
