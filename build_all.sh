@@ -38,7 +38,7 @@ cd $DPCPP_HOME
 (if cd llvm; then git pull; else git clone https://github.com/intel/llvm.git -b sycl; fi)
 cd llvm
 python3 ./buildbot/configure.py \
-  --cuda \
+  --cuda --enable-esimd-cpu-emulation \
   -t release --no-werror \
   --cmake-opt="-DCMAKE_INSTALL_PREFIX=$DPCPP_HOME/deploy" \
   --cmake-opt="-DCUDA_SDK_ROOT_DIR=$CUDA_ROOT" \

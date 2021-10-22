@@ -5,6 +5,7 @@ This script allows you to build and setup the DPC++ compiler, oneMKL and oneDNN 
 ### Use
 
 1. If needed, set `$DPCPP_HOME` and `$CUDA_ROOT` in the script.
+2. Install optionally the Intel(R) OpenCL Runtime with `sudo ./opencl.sh`
 2. Run the script with ```./build.sh```.
 
 Everything will be installed to `$DPCPP_HOME/deploy`.
@@ -12,7 +13,7 @@ Everything will be installed to `$DPCPP_HOME/deploy`.
 To build with testing support and run the tests for DPC++, oneMKL, oneTBB, oneDNN and Lapack,
 run: ```DPCPP_TESTS=ON ./build.sh```
 
-If you want to build libc++, use `CC=clang-X CXX=clang++-X` with another version of clang, gcc won't compile the libc as
+If you want to build libc++, use `CC=clang CXX=clang++` with another version of clang, gcc won't compile the libc as
 the `asm` syntax is not the same. Using this clang/dpc++ won't work either, there's a bug. Then link
 with `-stdlib=libc++`.
 
@@ -37,12 +38,13 @@ public:
 2. Build with `-fsycl -fsycl-targets=nvptx64-nvidia-cuda-sycldevice`
 3. For oneMKL, link with: `-lonemkl_blas_cublas -lonemkl`
 
-### Intel's openCL
+### Intel (R) OpenCL Runtime
 
-You can also install Intel's openCL driver (`intel-oneapi-runtime-opencl`) so you can target your CPU
-with `-fsycl-targets=spir64_x86_64-unknown-unknown-sycldevice`. For the setup
-see [here](https://software.intel.com/content/www/us/en/develop/documentation/installation-guide-for-intel-oneapi-toolkits-linux/top/installation/install-using-package-managers.html)
+For AOT build with `-fsycl-targets=spir64_x86_64`.
 .
+
+### ESIMD 
+* `libva-devel`
 
 ### Dependencies
 
@@ -50,7 +52,6 @@ see [here](https://software.intel.com/content/www/us/en/develop/documentation/in
   On RHEL: `cuda-10-2 libcublas-devel-10-2`. For the setup
   see: https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html#pre-installation-actions.
 * `libatomic`
-* to be able to target Intel's CPUs with openCL.
 * `ninja-build cmake libxml2-devel ...` and other "build essentials" required for building a compiler.
 * `libcudnn8 libcudnn8-devel` for oneDNN.
 * `gcc-gfortran` or another Fortran compiler for NETLIB Lapack.
