@@ -4,6 +4,14 @@ export CUDA_ROOT=/usr/local/cuda-11
 export LD_LIBRARY_PATH=$DPCPP_HOME/deploy/lib/:$DPCPP_HOME/deploy/lib64/:$DPCPP_HOME/lapack/install/lib64/:$DPCPP_HOME/OpenCL-ICD-Loader/install/lib64:$CUDA_ROOT/lib:$CUDA_ROOT/lib64:$LD_LIBRARY_PATH
 export PATH=$DPCPP_HOME/deploy/bin/:$CUDA_ROOT/bin:$PATH
 
+export CC=clang
+export CXX=clang++
+
+command -v clang >/dev/null 2>&1 || export CC=gcc
+command -v clang++ >/dev/null 2>&1 || export CXX=g++
+
+export PKG_CONFIG_PATH=$DPCPP_HOME/deploy/lib64/pkgconfig:$DPCPP_HOME/deploy/lib/pkgconfig:${PKG_CONFIG_PATH}
+
 mkdir -p $DPCPP_HOME
 cd $DPCPP_HOME
 mkdir -p deploy
@@ -20,6 +28,19 @@ else
 fi
 
 export CXXFLAGS="${CXXFLAGS} -D_GLIBCXX_USE_CXX11_ABI=1"
+
+# For testing spirv (see LLVM cmake configuration message)
+cd $DPCPP_HOME
+(if cd SPIRV-Tools; then git pull; else git clone https://github.com/KhronosGroup/SPIRV-Tools.git; fi)
+cd SPIRV-Tools
+(cd external ; (if cd SPIRV-Headers; then git pull; else git clone https://github.com/KhronosGroup/SPIRV-Headers.git; fi))
+(cd external ; (if cd googletest; then git pull; else git clone https://github.com/google/googletest.git; fi))
+(cd external ; (if cd effcee; then git pull; else git clone https://github.com/google/effcee.git; fi))
+(cd external ; (if cd re2; then git pull; else git clone https://github.com/google/re2.git; fi))
+mkdir -p build ; cd build 
+cmake -DCMAKE_INSTALL_PREFIX=$DPCPP_HOME/deploy -DSPIRV_WERROR=OFF -DCMAKE_BUILD_TYPE=Release ..
+make install -j `nproc`
+
 
 # OpenCL headers+ICD
 cd $DPCPP_HOME
@@ -42,8 +63,10 @@ python3 ./buildbot/configure.py \
   -t release --no-werror \
   --cmake-opt="-DCMAKE_INSTALL_PREFIX=$DPCPP_HOME/deploy" \
   --cmake-opt="-DCUDA_SDK_ROOT_DIR=$CUDA_ROOT" \
+  --cmake-opt="-DLLVM_SPIRV=$DPCPP_HOME/deploy/bin/llvm-spirv" \
   --cmake-opt="-DLLVM_BINUTILS_INCDIR=/usr/local/include" \
-  --cmake-opt="-DLLVM_ENABLE_PROJECTS=clang;sycl;llvm-spirv;libunwind;opencl;libdevice;xpti;xptifw;libclc;lld;lldb;libcxx;libcxxabi;openmp;clang-tools-extra;compiler-rt" \
+  --llvm-external-projects="clang;sycl;llvm-spirv;opencl;libdevice;xpti;xptifw;libclc;lld;lldb;openmp;clang-tools-extra;compiler-rt" \
+  --cmake-opt="-DLLVM_ENABLE_RUNTIMES=libcxx;libcxxabi;libunwind" \
   --cmake-opt="-DLLVM_BUILD_TESTS=$cmake_test" \
   --cmake-opt="-DCMAKE_CXX_STANDARD=17" \
   --cmake-opt="-DLLVM_ENABLE_LTO=off" \
