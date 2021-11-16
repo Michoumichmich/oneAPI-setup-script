@@ -1,7 +1,7 @@
 export DPCPP_HOME=~/sycl_workspace
 
 cpu_ocl_version=2021.12.9.0.24
-wget -nc https://github.com/intel/llvm/releases/download/2021-WW40/oclcpuexp-2021.12.9.0.24_rel.tar.gz
+wget -nc https://github.com/intel/llvm/releases/download/2021-WW40/oclcpuexp-${cpu_ocl_version}_rel.tar.gz
 
 mkdir -p /opt/intel/oclcpuexp_$cpu_ocl_version
 tar -C /opt/intel/oclcpuexp_$cpu_ocl_version -zxvf oclcpuexp-${cpu_ocl_version}_rel.tar.gz
