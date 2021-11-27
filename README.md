@@ -19,8 +19,7 @@ with `-stdlib=libc++`.
 
 ### Environment variables
 
-Once everything was built, add the first four exports of the script in your environment or add them in your shell's
-config file.
+Once everything was built, add the first four exports of the script in your environment or add them in the `.bashenv`.
 
 ### Using the CUDA Backend
 
@@ -57,6 +56,8 @@ For AOT build with `-fsycl-targets=spir64_x86_64`.
 * `gcc-gfortran` or another Fortran compiler for NETLIB Lapack.
 * `hwloc-devel` for oneTBB
 * `mpfr-devel` when building libcxx
+# `lua-devel python3.-devel libedit-devel`
+
 
 ### Caveats
 

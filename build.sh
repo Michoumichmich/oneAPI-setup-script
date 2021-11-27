@@ -59,7 +59,7 @@ cd $DPCPP_HOME
 (if cd llvm; then git pull; else git clone https://github.com/intel/llvm.git -b sycl; fi)
 cd llvm
 python3 ./buildbot/configure.py \
-  --cuda \
+  --cuda --shared-libs \
   -t release --no-werror \
   --cmake-opt="-DCMAKE_INSTALL_PREFIX=$DPCPP_HOME/deploy" \
   --cmake-opt="-DCUDA_SDK_ROOT_DIR=$CUDA_ROOT" \
@@ -104,16 +104,16 @@ cd $DPCPP_HOME
 cd oneTBB
 mkdir -p build
 cd build
-cmake -GNinja \
+cmake \
   -DCMAKE_CXX_COMPILER=$DPCPP_HOME/deploy/bin/clang++ \
   -DCMAKE_BUILD_TYPE=Release \
   -DTBB_STRICT=OFF \
   -DCMAKE_INSTALL_PREFIX=$DPCPP_HOME/deploy/ \
   -DTBB_TEST=$cmake_test \
   ..
-ninja install -j $(nproc)
+make install -j $(nproc)
 if $run_test; then
-  ninja test -j $(nproc)
+  make test -j $(nproc)
 fi
 
 #oneMKL
