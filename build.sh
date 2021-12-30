@@ -59,14 +59,13 @@ cd $DPCPP_HOME
 (if cd llvm; then git pull; else git clone https://github.com/intel/llvm.git -b sycl; fi)
 cd llvm
 python3 ./buildbot/configure.py \
-  --cuda --shared-libs \
+  --cuda \
   -t release --no-werror \
   --cmake-opt="-DCMAKE_INSTALL_PREFIX=$DPCPP_HOME/deploy" \
   --cmake-opt="-DCUDA_SDK_ROOT_DIR=$CUDA_ROOT" \
   --cmake-opt="-DLLVM_SPIRV=$DPCPP_HOME/deploy/bin/llvm-spirv" \
   --cmake-opt="-DLLVM_BINUTILS_INCDIR=/usr/local/include" \
-  --llvm-external-projects="clang;sycl;llvm-spirv;opencl;libdevice;xpti;xptifw;libclc;lld;lldb;openmp;clang-tools-extra;compiler-rt" \
-  --cmake-opt="-DLLVM_ENABLE_RUNTIMES=libcxx;libcxxabi;libunwind" \
+  --llvm-external-projects="libcxx;libcxxabi;libunwind;clang;sycl;llvm-spirv;opencl;libdevice;xpti;xptifw;libclc;lld;lldb;openmp;clang-tools-extra;compiler-rt" \
   --cmake-opt="-DLLVM_BUILD_TESTS=$cmake_test" \
   --cmake-opt="-DCMAKE_CXX_STANDARD=17" \
   --cmake-opt="-DLLVM_ENABLE_LTO=off" \
