@@ -27,7 +27,7 @@ else
   cmake_test="ON"
 fi
 
-export CXXFLAGS="${CXXFLAGS} -D_GLIBCXX_USE_CXX11_ABI=1"
+#export CXXFLAGS="${CXXFLAGS} -D_GLIBCXX_USE_CXX11_ABI=1"
 
 # For testing spirv (see LLVM cmake configuration message)
 cd $DPCPP_HOME
