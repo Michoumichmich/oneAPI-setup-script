@@ -60,7 +60,7 @@ cd $DPCPP_HOME
 cd llvm
 python3 ./buildbot/configure.py \
   --cuda \
-  -t release --no-werror \
+  -t release --no-werror --no-assertions \
   --cmake-opt="-DCMAKE_INSTALL_PREFIX=$DPCPP_HOME/deploy" \
   --cmake-opt="-DCUDA_SDK_ROOT_DIR=$CUDA_ROOT" \
   --cmake-opt="-DLLVM_SPIRV=$DPCPP_HOME/deploy/bin/llvm-spirv" \
@@ -70,6 +70,7 @@ python3 ./buildbot/configure.py \
   --cmake-opt="-DCMAKE_CXX_STANDARD=17" \
   --cmake-opt="-DLLVM_ENABLE_LTO=off" \
   --cmake-opt="-DLLVM_ENABLE_LLD=ON" \
+  --cmake-opt="-DLLVM_ABI_BREAKING_CHECKS=FORCE_OFF" \
   --cmake-opt="-Wno-dev"
 cd build
 ninja install -j $(nproc)
