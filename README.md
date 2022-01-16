@@ -56,7 +56,7 @@ For AOT build with `-fsycl-targets=spir64_x86_64`.
 * `gcc-gfortran` or another Fortran compiler for NETLIB Lapack.
 * `hwloc-devel` for oneTBB
 * `mpfr-devel` when building libcxx
-# `lua-devel python3.-devel libedit-devel`
+* `lua-devel python3.-devel libedit-devel`
 
 
 ### Caveats
