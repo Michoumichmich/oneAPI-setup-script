@@ -70,6 +70,7 @@ python3 ./buildbot/configure.py \
   --cmake-opt="-DCMAKE_CXX_STANDARD=17" \
   --cmake-opt="-DLLVM_ENABLE_LTO=off" \
   --cmake-opt="-DLLVM_ENABLE_LLD=ON" \
+  --cmake-opt="-DLLVM_ENABLE_NEW_PASS_MANAGER=ON" \
   --cmake-opt="-DLLVM_ABI_BREAKING_CHECKS=FORCE_OFF" \
   --cmake-opt="-Wno-dev"
 cd build
