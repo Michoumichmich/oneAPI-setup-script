@@ -60,7 +60,7 @@ cd $DPCPP_HOME
 cd llvm
 python3 ./buildbot/configure.py \
   --cuda \
-  -t release --no-werror --no-assertions \
+  -t release --no-assertions \
   --cmake-opt="-DCMAKE_INSTALL_PREFIX=$DPCPP_HOME/deploy" \
   --cmake-opt="-DCUDA_SDK_ROOT_DIR=$CUDA_ROOT" \
   --cmake-opt="-DLLVM_SPIRV=$DPCPP_HOME/deploy/bin/llvm-spirv" \
@@ -119,7 +119,7 @@ fi
 
 #oneMKL
 cd $DPCPP_HOME
-(if cd oneMKL; then git pull; else git clone https://github.com/oneapi-src/oneMKL.git; fi)
+(if cd oneMKL; then git pull; else git clone https://github.com/Michoumichmich/oneMKL.git; fi)
 cd oneMKL
 mkdir -p build
 cd build
